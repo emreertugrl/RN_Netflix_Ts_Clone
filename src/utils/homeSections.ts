@@ -9,10 +9,10 @@ export const homeData: {id: number; title: string}[] = [
   },
   {
     id: 3,
-    title: 'Trending Movies This Week',
+    title: 'Top Rated Movies',
   },
   {
     id: 4,
-    title: 'Trending Movies Today',
+    title: 'Popular Movies',
   },
 ];
