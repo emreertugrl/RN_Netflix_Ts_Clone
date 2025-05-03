@@ -1,4 +1,4 @@
-export const homeData = [
+export const homeData: {id: number; title: string}[] = [
   {
     id: 1,
     title: 'Top Rated Tv Shows',
@@ -12,7 +12,7 @@ export const homeData = [
     title: 'Trending Movies This Week',
   },
   {
-    id: 41,
+    id: 4,
     title: 'Trending Movies Today',
   },
 ];
