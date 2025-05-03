@@ -17,6 +17,7 @@ interface Movie {
 
 interface MoviesTypes {
   topRatedMovies: Movie[];
+  popularMovies: Movie[];
   pending: boolean;
   error: string | null;
 }
