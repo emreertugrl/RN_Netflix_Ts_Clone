@@ -1,10 +1,15 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {getPopularMovies, getTopRatedMovies} from '../actions/moviesActions';
+import {
+  getMovieDetail,
+  getPopularMovies,
+  getTopRatedMovies,
+} from '../actions/moviesActions';
 import {Movie, MoviesTypes} from '../../model/data/moviesTypes';
 
 const initialState: MoviesTypes = {
   topRatedMovies: [],
   popularMovies: [],
+  movieDetail: {},
   pending: false,
   error: null,
 };
@@ -47,7 +52,22 @@ const moviesSlice = createSlice({
           state.pending = true;
           state.error = action.payload;
         },
-      );
+      )
+      .addCase(getMovieDetail.pending, state => {
+        state.pending = true;
+        state.movieDetail = {};
+      })
+      .addCase(
+        getMovieDetail.fulfilled,
+        (state, action: PayloadAction<Movie>) => {
+          state.pending = true;
+          state.movieDetail = action.payload;
+        },
+      )
+      .addCase(getMovieDetail.rejected, (state, action: PayloadAction<any>) => {
+        state.pending = true;
+        state.error = action.payload;
+      });
   },
 });
 

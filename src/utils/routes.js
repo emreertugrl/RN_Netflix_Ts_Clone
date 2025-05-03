@@ -5,6 +5,7 @@ const Routes = {
   NEWHOT: 'New & Hot',
   DOWNLOADS: 'Downloads',
   FASTLAUGHTS: 'Fast Laughts',
+  MOVIEDETAIL: 'Movie Detail',
 };
 
 export default Routes;

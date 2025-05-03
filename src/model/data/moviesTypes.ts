@@ -18,8 +18,11 @@ interface Movie {
 interface MoviesTypes {
   topRatedMovies: Movie[];
   popularMovies: Movie[];
+  movieDetail: object;
   pending: boolean;
   error: string | null;
 }
-
-export type {MoviesTypes, Movie};
+interface MovieDetailParams {
+  movieId: number;
+}
+export type {MoviesTypes, Movie, MovieDetailParams};

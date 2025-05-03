@@ -7,4 +7,5 @@ export const POPULAR_TV_URL = 'tv/popular';
 export const UPCOMING_MOVIES_URL = 'movie/upcoming';
 export const NOWPLAYING_MOVIES_URL = 'movie/now_playing';
 export const MOVIE_URL = `movie/`;
+export const TV_URL = `tv/`;
 export const CATEGORIES_URL = 'genre/movie/list';

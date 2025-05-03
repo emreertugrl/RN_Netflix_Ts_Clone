@@ -1,25 +1,36 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import {View, FlatList} from 'react-native';
 import {SectionItemProps} from '../../model/ui/sectionItem';
 import SectionTitle from '../ui/sectionTitle';
 import MovieItem from './movieItem';
 
 const SectionItem: React.FC<SectionItemProps> = ({section, data}) => {
+  const getMovieByType = (type: number): string => {
+    switch (type) {
+      case 1:
+      case 2:
+        return 'tv';
+      case 3:
+      case 4:
+        return 'movie';
+      default:
+        return '';
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <View>
       <SectionTitle title={section.title} />
       <FlatList
         horizontal
         data={data}
-        renderItem={({item}) => <MovieItem item={item} />}
+        renderItem={({item}) => (
+          <MovieItem item={item} type={getMovieByType(section.id)} />
+        )}
         keyExtractor={item => item.id.toString()}
       />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {},
-});
 
 export default SectionItem;

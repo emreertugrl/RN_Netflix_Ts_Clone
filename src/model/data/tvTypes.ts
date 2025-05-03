@@ -1,3 +1,5 @@
+import {TVDetail} from './tvDetailTypes';
+
 interface Tv {
   adult: boolean;
   backdrop_path: string;
@@ -18,6 +20,7 @@ interface Tv {
 interface TvTypes {
   topRatedTv: Tv[];
   popularTv: Tv[];
+  tvDetail: TVDetail;
   pending: boolean;
   error: string | null;
 }
