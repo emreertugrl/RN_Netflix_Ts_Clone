@@ -14,18 +14,21 @@ import messaging from '@react-native-firebase/messaging'; //ios
 
 const Home: React.FC = () => {
   const requestUserPermission = async () => {
-    PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-    );
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    if (Platform.OS === 'android') {
+      PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+      );
+    } else {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-    if (enabled) {
-      console.log('Authorization status:', authStatus);
-      const token = await messaging().getToken();
-      console.log('FCM token:', token);
+      if (enabled) {
+        console.log('Authorization status:', authStatus);
+        const token = await messaging().getToken();
+        console.log('FCM token:', token);
+      }
     }
   };
   // Get device token for notification
@@ -39,15 +42,26 @@ const Home: React.FC = () => {
         console.log('❌ Token alma hatası:', err);
       });
   };
+
   useEffect(() => {
     requestUserPermission();
     getToken();
-
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('Yeni Bildirim!', JSON.stringify(remoteMessage));
+    // Uygulama ön planda iken bildirim almak için
+    const unsubscribeOnMessage = messaging().onMessage(async remoteMessage => {
+      console.log('📩 Ön planda mesaj alındı:', remoteMessage);
     });
 
-    return unsubscribe; // Cleanup function
+    // Uygulama arka planda iken tıklanarak açıldığında
+    const unsubscribeOnNotificationOpenedApp =
+      messaging().onNotificationOpenedApp(async remoteMessage => {
+        console.log('📩 Arka planda mesaj alındı:', remoteMessage);
+      });
+
+    // Cleanup fonksiyonu ile abonelikleri temizle
+    return () => {
+      unsubscribeOnMessage();
+      unsubscribeOnNotificationOpenedApp();
+    };
   }, []);
 
   const dispatch = useAppDispatch();
