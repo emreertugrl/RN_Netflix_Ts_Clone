@@ -12,8 +12,9 @@ import {getPopularTv, getTopRatedTv} from '../../store/actions/tvActions';
 import {PermissionsAndroid} from 'react-native'; //android
 import messaging from '@react-native-firebase/messaging'; //ios
 import {addNotification} from '../../store/slices/notificationSlice';
+import Routes from '../../utils/routes';
 
-const Home: React.FC = () => {
+const Home: React.FC = ({navigation}) => {
   const requestUserPermission = async () => {
     if (Platform.OS === 'android') {
       PermissionsAndroid.request(
@@ -24,11 +25,8 @@ const Home: React.FC = () => {
       const enabled =
         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
         authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
       if (enabled) {
-        console.log('Authorization status:', authStatus);
         const token = await messaging().getToken();
-        console.log('FCM token:', token);
       }
     }
   };
@@ -36,19 +34,25 @@ const Home: React.FC = () => {
   const getToken = () => {
     messaging()
       .getToken()
-      .then(token => {
-        console.log('🔥 TOKEN:', token);
-      })
+      .then(token => {})
       .catch(err => {
         console.log('❌ Token alma hatası:', err);
       });
   };
+  const subscribeToTopic = async () => {
+    try {
+      await messaging().subscribeToTopic('Haberler');
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     requestUserPermission();
     getToken();
+    subscribeToTopic();
     // Uygulama ön planda iken bildirim almak için
     const unsubscribeOnMessage = messaging().onMessage(async response => {
-      console.log('📩 Ön planda mesaj alındı:', response);
+      // console.log('📩 Ön planda mesaj alındı:', response);
       const read = response?.data?.read == 'false' ? false : true;
       dispatch(
         addNotification({
@@ -64,7 +68,16 @@ const Home: React.FC = () => {
     // Uygulama arka planda iken tıklanarak açıldığında
     const unsubscribeOnNotificationOpenedApp =
       messaging().onNotificationOpenedApp(async response => {
-        console.log('📩 Arka planda mesaj alındı:', response);
+        // console.log('📩 Arka planda mesaj alındı:', response);
+      });
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          navigation.navigate(Routes.MOVIEDETAIL, {
+            id: remoteMessage?.data?.id,
+          });
+        }
       });
 
     // Cleanup fonksiyonu ile abonelikleri temizle

@@ -30,7 +30,6 @@ const MoviesDetail: React.FC<Props> = ({route}) => {
   let detail;
   type === 'tv' ? (detail = tvDetail) : (detail = movieDetail);
 
-  console.log(detail);
   return (
     <View style={styles.container}>
       <ScrollView>
