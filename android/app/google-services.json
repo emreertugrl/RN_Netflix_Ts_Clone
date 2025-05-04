@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "312347939185",
+    "project_id": "netflix-41206",
+    "storage_bucket": "netflix-41206.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:312347939185:android:c7e97c38e01de289d9a6d0",
+        "android_client_info": {
+          "package_name": "com.tsnetflix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5u_XopDC0yJ7HMvZTjgOzNbLyl013x4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

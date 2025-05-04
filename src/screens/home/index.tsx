@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, FlatList} from 'react-native';
+import {View, FlatList, Alert} from 'react-native';
 import {defaultStyle} from '../../styles/defaultScreenStyle';
 import {
   getPopularMovies,
@@ -9,8 +9,27 @@ import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import SectionItem from '../../components/movies/sectionItem';
 import {homeData} from '../../utils/homeSections';
 import {getPopularTv, getTopRatedTv} from '../../store/actions/tvActions';
+import {PermissionsAndroid} from 'react-native'; //android
+import messaging from '@react-native-firebase/messaging'; //ios
 
 const Home: React.FC = () => {
+  // android permission
+  PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+  // ios permission
+  const requestUserPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  };
+  useEffect(() => {
+    requestUserPermission();
+  }, []);
+
   const dispatch = useAppDispatch();
   const {topRatedMovies, popularMovies} = useAppSelector(state => state.movies);
   const {topRatedTv, popularTv} = useAppSelector(state => state.tv);
