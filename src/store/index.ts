@@ -1,11 +1,13 @@
 import {configureStore} from '@reduxjs/toolkit';
 import moviesSlice from './slices/moviesSlice';
 import tvSlice from './slices/tvSlice';
+import notificationsSlice from './slices/notificationSlice';
 
 const store = configureStore({
   reducer: {
     movies: moviesSlice,
     tv: tvSlice,
+    notifications: notificationsSlice,
   },
 });
 

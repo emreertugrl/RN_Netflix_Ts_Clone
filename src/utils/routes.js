@@ -6,6 +6,7 @@ const Routes = {
   DOWNLOADS: 'Downloads',
   FASTLAUGHTS: 'Fast Laughts',
   MOVIEDETAIL: 'Movie Detail',
+  NOTIFICATIONS: 'Notifications',
 };
 
 export default Routes;

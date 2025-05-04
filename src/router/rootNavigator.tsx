@@ -3,6 +3,7 @@ import TabNavigator from './tabNavigator';
 import Routes from '../utils/routes';
 import {Colors} from '../theme';
 import MoviesDetail from '../screens/movies/moviesDetail';
+import Notifications from '../screens/notifications';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +28,13 @@ const RootNavigator: React.FC = () => {
         }}
         name={Routes.MOVIEDETAIL}
         component={MoviesDetail}
+      />
+      <Stack.Screen
+        options={{
+          headerTintColor: Colors.WHITE,
+        }}
+        name={Routes.NOTIFICATIONS}
+        component={Notifications}
       />
     </Stack.Navigator>
   );
