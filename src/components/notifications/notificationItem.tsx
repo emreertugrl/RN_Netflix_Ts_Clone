@@ -3,10 +3,20 @@ import {View, Text, Pressable} from 'react-native';
 import {Colors} from '../../theme';
 import {NotificationItemProps} from '../../model/data/notificationTypes';
 import {Notification} from 'iconsax-react-nativejs';
+import {useAppDispatch} from '../../store/hooks';
+import {markAsRead} from '../../store/slices/notificationSlice';
+import {useNavigation} from '@react-navigation/native';
+import Routes from '../../utils/routes';
 
 const NotificationItem: React.FC<NotificationItemProps> = ({item}) => {
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation();
   return (
     <Pressable
+      onPress={() => {
+        dispatch(markAsRead(item?.id));
+        navigation.navigate(Routes.MOVIEDETAIL, {movie: item});
+      }}
       style={{
         flexDirection: 'row',
         alignItems: 'center',

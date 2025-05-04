@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, FlatList, Alert, Platform} from 'react-native';
+import {View, FlatList, Platform} from 'react-native';
 import {defaultStyle} from '../../styles/defaultScreenStyle';
 import {
   getPopularMovies,
@@ -11,6 +11,7 @@ import {homeData} from '../../utils/homeSections';
 import {getPopularTv, getTopRatedTv} from '../../store/actions/tvActions';
 import {PermissionsAndroid} from 'react-native'; //android
 import messaging from '@react-native-firebase/messaging'; //ios
+import {addNotification} from '../../store/slices/notificationSlice';
 
 const Home: React.FC = () => {
   const requestUserPermission = async () => {
@@ -42,19 +43,28 @@ const Home: React.FC = () => {
         console.log('❌ Token alma hatası:', err);
       });
   };
-
   useEffect(() => {
     requestUserPermission();
     getToken();
     // Uygulama ön planda iken bildirim almak için
-    const unsubscribeOnMessage = messaging().onMessage(async remoteMessage => {
-      console.log('📩 Ön planda mesaj alındı:', remoteMessage);
+    const unsubscribeOnMessage = messaging().onMessage(async response => {
+      console.log('📩 Ön planda mesaj alındı:', response);
+      const read = response?.data?.read == 'false' ? false : true;
+      dispatch(
+        addNotification({
+          title: response.notification?.title,
+          description: response.notification?.body,
+          time: response.data?.time,
+          id: response?.data?.id,
+          read: read,
+        }),
+      );
     });
 
     // Uygulama arka planda iken tıklanarak açıldığında
     const unsubscribeOnNotificationOpenedApp =
-      messaging().onNotificationOpenedApp(async remoteMessage => {
-        console.log('📩 Arka planda mesaj alındı:', remoteMessage);
+      messaging().onNotificationOpenedApp(async response => {
+        console.log('📩 Arka planda mesaj alındı:', response);
       });
 
     // Cleanup fonksiyonu ile abonelikleri temizle

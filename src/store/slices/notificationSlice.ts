@@ -2,39 +2,32 @@ import {createSlice} from '@reduxjs/toolkit';
 import {NotificationsTypes} from '../../model/data/notificationTypes';
 
 const initialState: NotificationsTypes = {
-  notifications: [
-    {
-      title: 'Bildirim-1',
-      description: 'açıklama kısmı buraya gelecek',
-      path: 'path-1',
-      time: '21 Ocak 2026',
-      read: false,
-    },
-    {
-      title: 'Bildirim-2',
-      description: 'açıklama kısmı buraya gelecek',
-      path: 'path-2',
-      time: '23 Ocak 2026',
-      read: false,
-    },
-    {
-      title: 'Bildirim-3',
-      description: 'açıklama kısmı buraya gelecek',
-      path: 'path-3',
-      time: '25 Ocak 2026',
-      read: false,
-    },
-  ],
+  notifications: [],
   pending: false,
   error: null,
-  notificationCount: 1,
+  notificationCount: 0,
 };
 const notificationsSlice = createSlice({
   name: 'notifications',
   initialState,
-  reducers: {},
+  reducers: {
+    addNotification: (state, action) => {
+      state.notifications.push(action.payload);
+      state.notificationCount += 1;
+    },
+    markAsRead: (state, action) => {
+      const notificationId = action.payload;
+      const notification = state.notifications.find(
+        notify => notify?.id === notificationId,
+      );
+      if (notification) {
+        notification.read = true;
+        state.notificationCount -= 1;
+      }
+    },
+  },
 });
 
-export const {} = notificationsSlice.actions;
+export const {addNotification, markAsRead} = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;
