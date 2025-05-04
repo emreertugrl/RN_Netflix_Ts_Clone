@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, FlatList, Alert} from 'react-native';
+import {View, FlatList, Alert, Platform} from 'react-native';
 import {defaultStyle} from '../../styles/defaultScreenStyle';
 import {
   getPopularMovies,
@@ -13,10 +13,10 @@ import {PermissionsAndroid} from 'react-native'; //android
 import messaging from '@react-native-firebase/messaging'; //ios
 
 const Home: React.FC = () => {
-  // android permission
-  PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-  // ios permission
   const requestUserPermission = async () => {
+    PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+    );
     const authStatus = await messaging().requestPermission();
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
@@ -24,10 +24,30 @@ const Home: React.FC = () => {
 
     if (enabled) {
       console.log('Authorization status:', authStatus);
+      const token = await messaging().getToken();
+      console.log('FCM token:', token);
     }
+  };
+  // Get device token for notification
+  const getToken = () => {
+    messaging()
+      .getToken()
+      .then(token => {
+        console.log('🔥 TOKEN:', token);
+      })
+      .catch(err => {
+        console.log('❌ Token alma hatası:', err);
+      });
   };
   useEffect(() => {
     requestUserPermission();
+    getToken();
+
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('Yeni Bildirim!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe; // Cleanup function
   }, []);
 
   const dispatch = useAppDispatch();
