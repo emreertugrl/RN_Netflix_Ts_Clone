@@ -13,6 +13,7 @@ import {PermissionsAndroid} from 'react-native'; //android
 import messaging from '@react-native-firebase/messaging'; //ios
 import {addNotification} from '../../store/slices/notificationSlice';
 import Routes from '../../utils/routes';
+import firestore from '@react-native-firebase/firestore';
 
 const Home: React.FC = ({navigation}) => {
   const requestUserPermission = async () => {
@@ -34,7 +35,7 @@ const Home: React.FC = ({navigation}) => {
   const getToken = () => {
     messaging()
       .getToken()
-      .then(token => {})
+      .then(token => console.log(token))
       .catch(err => {
         console.log('❌ Token alma hatası:', err);
       });
@@ -45,6 +46,14 @@ const Home: React.FC = ({navigation}) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const addNotifications = async notification => {
+    firestore()
+      .collection('Notifications')
+      .add(notification)
+      .then(() => console.log('addd'))
+      .catch(err => {});
   };
   useEffect(() => {
     requestUserPermission();
@@ -63,6 +72,13 @@ const Home: React.FC = ({navigation}) => {
           read: read,
         }),
       );
+      addNotifications({
+        title: response.notification?.title,
+        description: response.notification?.body,
+        time: response.data?.time,
+        id: response?.data?.id,
+        read: read,
+      });
     });
 
     // Uygulama arka planda iken tıklanarak açıldığında

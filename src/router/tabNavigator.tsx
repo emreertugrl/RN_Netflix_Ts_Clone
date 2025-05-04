@@ -18,7 +18,7 @@ import {useAppSelector} from '../store/hooks';
 const Tab = createBottomTabNavigator();
 
 function TabNavigator() {
-  const {notificationCount} = useAppSelector(state => state.notifications);
+  const {notifications} = useAppSelector(state => state.notifications);
 
   return (
     <Tab.Navigator
@@ -39,7 +39,7 @@ function TabNavigator() {
             <Pressable
               onPress={() => navigation.navigate(Routes.NOTIFICATIONS)}>
               <Notification color={Colors.WHITE} size={28} />
-              {notificationCount > 0 && (
+              {notifications.filter(not => !not.read).length > 0 && (
                 <View
                   style={{
                     right: -12,
@@ -59,7 +59,7 @@ function TabNavigator() {
                       fontSize: 12,
                       fontWeight: 'bold',
                     }}>
-                    {notificationCount}
+                    {notifications.filter(not => !not.read).length}
                   </Text>
                 </View>
               )}

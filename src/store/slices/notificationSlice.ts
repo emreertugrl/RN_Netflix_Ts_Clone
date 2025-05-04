@@ -5,15 +5,19 @@ const initialState: NotificationsTypes = {
   notifications: [],
   pending: false,
   error: null,
-  notificationCount: 0,
 };
 const notificationsSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {
     addNotification: (state, action) => {
-      state.notifications.push(action.payload);
-      state.notificationCount += 1;
+      if (Array.isArray(action.payload)) {
+        // Tüm liste olarak gelmişse
+        state.notifications = action.payload;
+      } else if (action.payload) {
+        // Tek bir bildirim gelmişse en başa ekle
+        state.notifications.unshift(action.payload);
+      }
     },
     markAsRead: (state, action) => {
       const notificationId = action.payload;
@@ -22,7 +26,6 @@ const notificationsSlice = createSlice({
       );
       if (notification) {
         notification.read = true;
-        state.notificationCount -= 1;
       }
     },
   },

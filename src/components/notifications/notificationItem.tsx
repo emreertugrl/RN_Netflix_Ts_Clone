@@ -7,14 +7,27 @@ import {useAppDispatch} from '../../store/hooks';
 import {markAsRead} from '../../store/slices/notificationSlice';
 import {useNavigation} from '@react-navigation/native';
 import Routes from '../../utils/routes';
+import firestore from '@react-native-firebase/firestore';
 
 const NotificationItem: React.FC<NotificationItemProps> = ({item}) => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
+
+  const updateNotification = async () => {
+    firestore()
+      .collection('Notifications')
+      .doc(item.doc)
+      .update({
+        read: true,
+      })
+      .then(() => console.log('Güncellendi'))
+      .catch(err => {});
+  };
   return (
     <Pressable
       onPress={() => {
         dispatch(markAsRead(item?.id));
+        updateNotification();
         navigation.navigate(Routes.MOVIEDETAIL, {movie: item});
       }}
       style={{

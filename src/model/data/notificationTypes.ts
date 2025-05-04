@@ -5,12 +5,12 @@ interface Notificationss {
   time: string;
   read: boolean;
   path?: string;
+  doc: string;
 }
 interface NotificationItemProps {
   item: Notificationss;
 }
 interface NotificationsTypes {
-  notificationCount: number;
   notifications: Notificationss[];
   pending: boolean;
   error: any;
