@@ -15,7 +15,10 @@ interface Props {
   route: MoviesDetailRouteProp;
 }
 const MoviesDetail: React.FC<Props> = ({route}) => {
-  const {movie, type} = route.params || {};
+  const {movie, mId, type} = route.params || {};
+  console.log(movie?.id);
+  console.log(route);
+  console.log(mId);
 
   const dispatch = useAppDispatch();
   const {movieDetail} = useAppSelector(state => state.movies);
@@ -25,6 +28,11 @@ const MoviesDetail: React.FC<Props> = ({route}) => {
       type == 'tv'
         ? dispatch(getTvDetail({movieId: movie.id}))
         : dispatch(getMovieDetail({movieId: movie.id}));
+    }
+    if (mId) {
+      type == 'tv'
+        ? dispatch(getTvDetail({movieId: mId}))
+        : dispatch(getMovieDetail({movieId: mId}));
     }
   }, [movie?.id, type]);
   let detail;

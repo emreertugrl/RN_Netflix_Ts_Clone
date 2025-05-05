@@ -5,7 +5,7 @@ const Routes = {
   NEWHOT: 'New & Hot',
   DOWNLOADS: 'Downloads',
   FASTLAUGHTS: 'Fast Laughts',
-  MOVIEDETAIL: 'Movie Detail',
+  MOVIEDETAIL: 'movieDetail',
   NOTIFICATIONS: 'Notifications',
 };
 
